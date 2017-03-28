@@ -418,14 +418,15 @@ public class ClustererOverlay extends Overlay {
     }
 
     private int calculateCursorSize(){
-        return (int) (mCursorSize * normalizeCurrentZoom());
+        float zoom = normalizeCurrentZoom();
+        return (int) (mCursorSize * zoom);
     }
 
     private float normalizeCurrentZoom(){
         float min = mZoomLevels[0];
         int length = mZoomLevels.length;
         float max = mZoomLevels[length - 1];
-        return (mZoom - min) / (max - min);
+        return 0.5f + (mZoom - min) / (max - min);
     }
 
     private ClusteredOverlayItem performScan(){
