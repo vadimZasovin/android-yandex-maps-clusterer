@@ -124,14 +124,14 @@ public class ClustererOverlay extends Overlay {
             if(mOnClusterClickListener != null){
                 zoomIn = !mOnClusterClickListener.onClusterClick(item, zoom);
                 consumed = true;
-            }else {
-                consumed = mOnOverlayClickListener.onOverlayItemClick(item);
             }
             if(zoomIn){
                 GeoPoint point = item.getGeoPoint();
                 MapController controller = getMapController();
                 controller.setPositionAnimationTo(point, zoom);
             }
+        }else if(mOnOverlayClickListener != null){
+            consumed = mOnOverlayClickListener.onOverlayItemClick(item);
         }
         return consumed;
     }
