@@ -5,6 +5,7 @@ import android.content.res.Resources;
 import android.graphics.Rect;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import ru.yandex.yandexmapkit.MapController;
@@ -120,7 +121,13 @@ public class ClustererOverlay extends Overlay {
         if(item.isCluster()){
             if(mOnClusterClickListener != null){
                 float zoom = getZoomToOpenCluster();
-                consumed = mOnClusterClickListener.onClusterClick(item, zoom);
+                boolean zoomIn = !mOnClusterClickListener.onClusterClick(item, zoom);
+                if(zoomIn){
+                    GeoPoint point = item.getGeoPoint();
+                    MapController controller = getMapController();
+                    controller.setPositionAnimationTo(point, zoom);
+                }
+                consumed = true;
             }else {
                 consumed = mOnOverlayClickListener.onOverlayItemClick(item);
             }
@@ -129,7 +136,25 @@ public class ClustererOverlay extends Overlay {
     }
 
     private float getZoomToOpenCluster(){
-        return 0;
+        int step = 2;
+        int currentIndex = getCurrentZoomLevelIndex();
+        int newIndex = currentIndex + step;
+        int length = mZoomLevels.length;
+        if(newIndex >= length){
+            newIndex = length - 1;
+        }
+        return mZoomLevels[newIndex];
+    }
+
+    private int getCurrentZoomLevelIndex(){
+        int length = mZoomLevels.length;
+        for(int i = 0; i < length; i++){
+            float zoomLevel = mZoomLevels[i];
+            if(zoomLevel == mZoomLevel){
+                return i;
+            }
+        }
+        return length - 1;
     }
 
     private boolean onOverlayClick(float x, float y){
@@ -148,6 +173,9 @@ public class ClustererOverlay extends Overlay {
     }
 
     public void setReorganizationFrequency(float frequency){
+        if(frequency <= 0){
+            throw new IllegalArgumentException("frequency must be > 0");
+        }
         if(mReorganizationFrequency != frequency){
             mReorganizationFrequency = frequency;
             prepareZoomLevels();
@@ -155,6 +183,9 @@ public class ClustererOverlay extends Overlay {
     }
 
     public void setMaxReorganizationZoomLevel(float zoomLevel){
+        if(zoomLevel <= 0){
+            throw new IllegalArgumentException("zoom level must be > 0");
+        }
         if(mMaxZoomLevel != zoomLevel){
             mMaxZoomLevel = zoomLevel;
             prepareZoomLevels();
@@ -164,15 +195,19 @@ public class ClustererOverlay extends Overlay {
     private void prepareZoomLevels(){
         int size = (int) (mMaxZoomLevel / mReorganizationFrequency + 1);
         mZoomLevels = new float[size];
-        float zoomLevel = 1;
-        for(int i = 0; i < size; i ++){
+        float zoomLevel = 1f;
+        for(int i = 0; i < size; i++){
             mZoomLevels[i] = zoomLevel;
             zoomLevel += mReorganizationFrequency;
         }
     }
 
     public void setZoomLevels(float[] zoomLevels){
+        if(zoomLevels == null || zoomLevels.length == 0){
+            throw new IllegalArgumentException("zoom levels must not be null or empty");
+        }
         mZoomLevels = zoomLevels;
+        Arrays.sort(mZoomLevels);
     }
 
     @Override
@@ -382,7 +417,10 @@ public class ClustererOverlay extends Overlay {
     }
 
     private float normalizeCurrentZoom(){
-        return (float) (1 / (1 + Math.exp(-0.5 * mZoom)));
+        float min = mZoomLevels[0];
+        int length = mZoomLevels.length;
+        float max = mZoomLevels[length - 1];
+        return (mZoom - min) / (max - min);
     }
 
     private ClusteredOverlayItem performScan(){
