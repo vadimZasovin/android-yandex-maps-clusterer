@@ -126,9 +126,9 @@ public class ClustererOverlay extends Overlay {
                 consumed = true;
             }
             if(zoomIn){
-                GeoPoint point = item.getGeoPoint();
                 MapController controller = getMapController();
-                controller.setPositionNoAnimationTo(point, zoom);
+                GeoPoint point = item.getGeoPoint();
+                controller.setPositionAnimationTo(point, zoom);
             }
         }else if(mOnOverlayClickListener != null){
             consumed = mOnOverlayClickListener.onOverlayItemClick(item);
@@ -145,10 +145,11 @@ public class ClustererOverlay extends Overlay {
         }
         int currentIndex = getCurrentZoomLevelIndex();
         int newIndex = currentIndex + step;
-        if(newIndex >= length){
-            newIndex = length - 1;
+        if(newIndex < length){
+            return mZoomLevels[newIndex];
+
         }
-        return mZoomLevels[newIndex];
+        return getNextIncreasedZoom();
     }
 
     private int getCurrentZoomLevelIndex(){
@@ -160,6 +161,12 @@ public class ClustererOverlay extends Overlay {
             }
         }
         return length - 1;
+    }
+
+    private float getNextIncreasedZoom(){
+        MapController controller = getMapController();
+        float zoom = controller.getZoomCurrent();
+        return zoom + 1;
     }
 
     private boolean onOverlayClick(float x, float y){
