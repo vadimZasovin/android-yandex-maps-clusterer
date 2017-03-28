@@ -14,7 +14,7 @@ ext {
     siteUrl = 'https://github.com/vadimZasovin/android-yandex-maps-clusterer'
     gitUrl = 'https://github.com/vadimZasovin/android-yandex-maps-clusterer.git'
 
-    libraryVersion = '1.1'
+    libraryVersion = '1.2'
 
     developerId = 'vadimzasovin'
     developerName = 'Vadim Zasovin'
@@ -47,13 +47,7 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
-    compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'ru.yandex:yandexmapkit:2.5.4@aar'
-    testCompile 'junit:junit:4.12'
 }
 
 apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'
