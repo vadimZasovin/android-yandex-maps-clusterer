@@ -136,10 +136,14 @@ public class ClustererOverlay extends Overlay {
     }
 
     private float getZoomToOpenCluster(){
-        int step = 2;
+        int length = mZoomLevels.length;
+        int factor = 5;
+        int step = length / factor;
+        if(step == 0){
+            step = 1;
+        }
         int currentIndex = getCurrentZoomLevelIndex();
         int newIndex = currentIndex + step;
-        int length = mZoomLevels.length;
         if(newIndex >= length){
             newIndex = length - 1;
         }
