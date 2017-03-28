@@ -119,17 +119,18 @@ public class ClustererOverlay extends Overlay {
         ClusteredOverlayItem item = (ClusteredOverlayItem) overlayItem;
         boolean consumed = false;
         if(item.isCluster()){
+            boolean zoomIn = true;
+            float zoom = getZoomToOpenCluster();
             if(mOnClusterClickListener != null){
-                float zoom = getZoomToOpenCluster();
-                boolean zoomIn = !mOnClusterClickListener.onClusterClick(item, zoom);
-                if(zoomIn){
-                    GeoPoint point = item.getGeoPoint();
-                    MapController controller = getMapController();
-                    controller.setPositionAnimationTo(point, zoom);
-                }
+                zoomIn = !mOnClusterClickListener.onClusterClick(item, zoom);
                 consumed = true;
             }else {
                 consumed = mOnOverlayClickListener.onOverlayItemClick(item);
+            }
+            if(zoomIn){
+                GeoPoint point = item.getGeoPoint();
+                MapController controller = getMapController();
+                controller.setPositionAnimationTo(point, zoom);
             }
         }
         return consumed;
