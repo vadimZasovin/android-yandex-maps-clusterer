@@ -1,5 +1,30 @@
 apply plugin: 'com.android.library'
 
+ext {
+    bintrayRepo = 'maven_oss'
+    bintrayName = 'android-yandex-maps-clusterer'
+
+    publishedGroupId = 'com.appcraftlab'
+    libraryName = 'android-yandex-maps-clusterer'
+    artifact = 'yandex-maps-clusterer'
+
+    libraryDescription = 'Utility library that provides clustering ' +
+            'functionality for Android Yandex Mapkit library.'
+
+    siteUrl = 'https://github.com/vadimZasovin/android-yandex-maps-clusterer'
+    gitUrl = 'https://github.com/vadimZasovin/android-yandex-maps-clusterer.git'
+
+    libraryVersion = '1.0'
+
+    developerId = 'vadimzasovin'
+    developerName = 'Vadim Zasovin'
+    developerEmail = 'vzasovin@gmail.com'
+
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    allLicenses = ["Apache-2.0"]
+}
+
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
@@ -26,7 +51,10 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:25.3.0'
+    compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'ru.yandex:yandexmapkit:2.5.4@aar'
     testCompile 'junit:junit:4.12'
 }
+
+apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'
+apply from: 'https://gist.githubusercontent.com/vadimZasovin/652557d8a2e3795957cfb9eaed70e489/raw/c36624273500402466d8b142b6bcdca60728a783/bintray.gradle'
