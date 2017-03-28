@@ -128,7 +128,7 @@ public class ClustererOverlay extends Overlay {
             if(zoomIn){
                 GeoPoint point = item.getGeoPoint();
                 MapController controller = getMapController();
-                controller.setPositionAnimationTo(point, zoom);
+                controller.setPositionNoAnimationTo(point, zoom);
             }
         }else if(mOnOverlayClickListener != null){
             consumed = mOnOverlayClickListener.onOverlayItemClick(item);
@@ -138,7 +138,7 @@ public class ClustererOverlay extends Overlay {
 
     private float getZoomToOpenCluster(){
         int length = mZoomLevels.length;
-        int factor = 5;
+        int factor = 8;
         int step = length / factor;
         if(step == 0){
             step = 1;
