@@ -39,6 +39,7 @@ public class ClustererOverlay extends Overlay {
     private List<ClusteredOverlayItem> mHandled;
 
     private ClusterDrawableFactory mClusterDrawableFactory;
+    private boolean mClusteringEnabled = true;
 
     public ClustererOverlay(MapController mapController,
                             OnOverlayClickListener onOverlayClickListener,
@@ -83,6 +84,10 @@ public class ClustererOverlay extends Overlay {
 
     public void setClusterDrawableFactory(ClusterDrawableFactory factory){
         mClusterDrawableFactory = factory;
+    }
+
+    public void setClusteringEnabled(boolean clusteringEnabled){
+        mClusteringEnabled = clusteringEnabled;
     }
 
     @Override
@@ -225,7 +230,7 @@ public class ClustererOverlay extends Overlay {
     @Override
     public List prepareDraw() {
         List retval = super.prepareDraw();
-        if(hasItems() && zoomLevelChanged()){
+        if(mClusteringEnabled && hasItems() && zoomLevelChanged()){
             reorganize();
         }
         return retval;
