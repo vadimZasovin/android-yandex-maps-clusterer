@@ -14,7 +14,7 @@ ext {
     siteUrl = 'https://github.com/vadimZasovin/android-yandex-maps-clusterer'
     gitUrl = 'https://github.com/vadimZasovin/android-yandex-maps-clusterer.git'
 
-    libraryVersion = '1.10'
+    libraryVersion = '1.11'
 
     developerId = 'vadimzasovin'
     developerName = 'Vadim Zasovin'
